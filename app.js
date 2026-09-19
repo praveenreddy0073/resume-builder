@@ -1071,65 +1071,57 @@ function getDefaultProfile() {
       github: "github.com/username",
       portfolio: ""
     },
-    summary: "Electronics and Communication Engineering graduate with practical experience in Embedded Systems, Firmware Development, and Digital VLSI. Skilled in developing microcontroller-based systems (ESP32, STM32, Arduino, 8051), wireless communication protocols (LoRa, BLE, Wi-Fi), sensor interfacing (I2C, SPI, UART), and PCB design using KiCad. Experienced in building reliable hardware-software projects.",
+    summary: "Results-driven Embedded Systems and Firmware Engineer with experience in microcontroller firmware development (ESP32, STM32, ARM Cortex-M), real-time operating systems (FreeRTOS), and hardware communication protocols (I2C, SPI, UART, CAN). Proven track record designing custom PCBs, optimizing power consumption, and delivering reliable IoT solutions.",
     skills: [
-      { category: "Programming Languages", items: "C, Embedded C, Python, Verilog HDL, Assembly (8051)" },
-      { category: "Microcontrollers & Hardware", items: "ESP32, STM32, Arduino Uno, 8051" },
-      { category: "Communication & Protocols", items: "UART, SPI, I2C, LoRa (SX1278 @ 433MHz), Bluetooth / BLE, Wi-Fi" },
-      { category: "Core Electronics Skills", items: "Digital Electronics, Analog Electronics, Embedded Systems, PCB Design, Computer Networks, IoT" },
-      { category: "Tools & Technologies", items: "KiCad, EasyEDA, Xilinx Vivado, Keil µVision, Arduino IDE, MATLAB Simulink" }
+      { category: "Programming Languages", items: "C, Embedded C, C++, Python, Verilog HDL, Assembly" },
+      { category: "Microcontrollers & Hardware", items: "ESP32, STM32, ARM Cortex-M, Arduino Uno, 8051" },
+      { category: "Communication & Protocols", items: "UART, SPI, I2C, CAN Bus, MQTT, BLE, Wi-Fi" },
+      { category: "Core Electronics Skills", items: "Digital Electronics, Analog Circuit Design, PCB Layout, RTOS, IoT Architecture" },
+      { category: "Tools & Technologies", items: "KiCad, Xilinx Vivado, Keil µVision, Oscilloscope, Logic Analyzer, Git" }
     ],
     experience: [],
     projects: [
       {
-        name: "LoRa-Based Long-Range Disaster Communication Network",
-        technologies: "ESP32, LoRa (SX1278 @ 433MHz), Wi-Fi Captive Portal, Embedded C",
-        link: "",
+        name: "Automated Smart Environmental Monitoring & Telemetry Station",
+        technologies: "ESP32, FreeRTOS, MQTT, BME280 Sensor, Wi-Fi, KiCad",
+        link: "github.com/username/env-telemetry",
         highlights: [
-          "Built an off-grid emergency communication network enabling long-range SOS transmission across a 1.8 km range without cellular connectivity.",
-          "Implemented an autonomous Wi-Fi Captive Portal on the ESP32 User Node, allowing survivors to connect via any smartphone browser to submit distress messages with GPS coordinates.",
-          "Programmed multi-hop packet forwarding across Relay Nodes with message deduplication, delivering alerts with <500 ms latency to the central Base Station dashboard.",
-          "Achieved compressed voice transmission over LoRa using Codec2 technology."
+          "Engineered an IoT-enabled environmental monitoring node collecting real-time temperature, humidity, and air quality telemetry data.",
+          "Implemented low-power sleep cycles and MQTT message queuing, reducing overall system power consumption by 35%.",
+          "Designed a compact 2-layer PCB in KiCad and built a responsive live dashboard displaying telemetry with <200 ms update latency."
         ]
       },
       {
-        name: "Intelligent Assistive Exoskeleton for Human Mobility Support",
-        technologies: "ESP32, Arduino IDE, IMU Sensor, FSR Pressure Sensors, Bluetooth (BLE)",
-        link: "",
+        name: "Industrial Motor Speed Controller & Diagnostic Interface",
+        technologies: "STM32, C/C++, PWM, CAN Bus, FreeRTOS, Logic Analyzer",
+        link: "github.com/username/motor-controller",
         highlights: [
-          "Developed a motorized lower-limb robotic exoskeleton prototype featuring automated closed-loop and manual control modes to assist mobility.",
-          "Implemented sensor fusion using an IMU and in-sole FSR pressure sensors for real-time movement detection with <20 ms response latency.",
-          "Integrated Bluetooth (BLE) wireless communication for remote control and telemetry monitoring within a 10 m range, designing a custom power PCB in KiCad."
+          "Developed closed-loop PID speed control firmware for brushless DC motors with 99.2% speed regulation accuracy.",
+          "Integrated CAN Bus communication protocol for real-time diagnostic reporting and fault detection under high-noise industrial environments.",
+          "Conducted hardware-in-the-loop (HIL) testing and validated firmware reliability across 50+ test cycles with 0% communication packet drop."
         ]
       }
     ],
     education: [
       {
-        degree: "Bachelor of Technology (B.Tech) in Electronics & Communication Engineering",
-        institution: "Reva University",
-        location: "Bangalore, Karnataka",
-        period: "2023 – 2027",
-        details: "CGPA: 8.2 / 10.0"
+        degree: "Bachelor of Science in Electrical & Computer Engineering",
+        institution: "State Technical University",
+        location: "City, State",
+        period: "2020 – 2024",
+        details: "GPA: 3.8 / 4.0 • Dean's Honor List"
       },
       {
-        degree: "Class XII (Pre-University Course - PCMB)",
-        institution: "Sarvajna PU College",
-        location: "Kalaburagi, Karnataka",
-        period: "2022 – 2023",
-        details: "Percentage: 90.5%"
-      },
-      {
-        degree: "Class X (CBSE)",
-        institution: "Nekkanti Ramarao CBSE High School",
-        location: "Koppal, Karnataka",
-        period: "2020 – 2021",
-        details: "Percentage: 90.0%"
+        degree: "High School Diploma (Science & Mathematics Focus)",
+        institution: "Central Science Academy",
+        location: "City, State",
+        period: "2018 – 2020",
+        details: "Graduated with High Honors (92.0%)"
       }
     ],
     certifications: [
-      "PCB Design & Fabrication – Issued by Enthu EdTech",
-      "Digital Electronics and VLSI Architecture – Issued by Codec Technologies",
-      "Embedded Systems – Issued by EMERTXE"
+      "Embedded Systems & RTOS Engineering – Professional Certificate",
+      "IoT System Architecture & Protocols – Industry Certification",
+      "PCB Design and Fabrication Mastery"
     ]
   };
 }
