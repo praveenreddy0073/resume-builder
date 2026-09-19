@@ -126,12 +126,6 @@ function setupEventListeners() {
       showToast(`Loaded ${e.target.options[e.target.selectedIndex].text}`);
     });
   }
-      renderForm();
-      renderPreview();
-      updateATSScore();
-      showToast(`Loaded ${e.target.options[e.target.selectedIndex].text}`);
-    });
-  }
 
   // Clear / Start Blank Button
   const btnClearForm = document.getElementById('btnClearForm');
@@ -517,12 +511,13 @@ function renderPreview() {
   }
 
   // Skills
-  if (resumeData.skills && resumeData.skills.length > 0) {
+  const validSkills = (resumeData.skills || []).filter(s => s && s.category && s.items && s.items.trim().length > 0);
+  if (validSkills.length > 0) {
     resumeHtml += `
       <section class="section-block">
         <h2 class="sec-title">Technical Skills</h2>
         <div style="display: flex; flex-direction: column; gap: 3px;">
-          ${resumeData.skills.map(s => `
+          ${validSkills.map(s => `
             <div><strong>${escapeHtml(s.category)}:</strong> ${escapeHtml(s.items)}</div>
           `).join('')}
         </div>
@@ -531,23 +526,26 @@ function renderPreview() {
   }
 
   // Experience
-  if (resumeData.experience && resumeData.experience.length > 0) {
+  const validExp = (resumeData.experience || []).filter(exp => exp && (exp.role?.trim() || exp.company?.trim()));
+  if (validExp.length > 0) {
     resumeHtml += `
       <section class="section-block">
         <h2 class="sec-title">Work Experience</h2>
-        ${resumeData.experience.map(exp => `
+        ${validExp.map(exp => `
           <div class="entry-item" style="margin-bottom: 8px;">
             <div class="entry-row">
-              <div><span class="entry-name">${escapeHtml(exp.role)}</span> – <span class="entry-company">${escapeHtml(exp.company)}</span></div>
+              <div><span class="entry-name">${escapeHtml(exp.role || '')}</span>${exp.role && exp.company ? ' – ' : ''}<span class="entry-company">${escapeHtml(exp.company || '')}</span></div>
               <div class="entry-date">${escapeHtml(exp.location || '')}</div>
             </div>
-            <div class="entry-row" style="margin-bottom: 2px;">
-              <div style="font-size: 8.8pt; color: #64748b;">${escapeHtml(exp.team || '')}</div>
-              <div class="entry-date">${escapeHtml(exp.period || '')}</div>
-            </div>
-            ${exp.highlights && exp.highlights.length ? `
+            ${exp.team || exp.period ? `
+              <div class="entry-row" style="margin-bottom: 2px;">
+                <div style="font-size: 8.8pt; color: #64748b;">${escapeHtml(exp.team || '')}</div>
+                <div class="entry-date">${escapeHtml(exp.period || '')}</div>
+              </div>
+            ` : ''}
+            ${exp.highlights && exp.highlights.filter(h => h.trim()).length ? `
               <ul class="resume-bullets">
-                ${exp.highlights.map(h => `<li>${formatMetrics(escapeHtml(h))}</li>`).join('')}
+                ${exp.highlights.filter(h => h.trim()).map(h => `<li>${formatMetrics(escapeHtml(h))}</li>`).join('')}
               </ul>
             ` : ''}
           </div>
@@ -557,11 +555,12 @@ function renderPreview() {
   }
 
   // Projects
-  if (resumeData.projects && resumeData.projects.length > 0) {
+  const validProjects = (resumeData.projects || []).filter(p => p && p.name && p.name.trim().length > 0);
+  if (validProjects.length > 0) {
     resumeHtml += `
       <section class="section-block">
         <h2 class="sec-title">Key Projects</h2>
-        ${resumeData.projects.map(proj => `
+        ${validProjects.map(proj => `
           <div class="entry-item" style="margin-bottom: 7px;">
             <div class="entry-row">
               <div>
@@ -570,9 +569,9 @@ function renderPreview() {
               </div>
               <div class="entry-date">${proj.link && proj.link.trim() ? `<a href="${escapeHtml(proj.link.startsWith('http') ? proj.link : 'https://' + cleanUrl(proj.link))}" target="_blank" style="color: inherit;">${escapeHtml(proj.link)}</a>` : ''}</div>
             </div>
-            ${proj.highlights && proj.highlights.length ? `
+            ${proj.highlights && proj.highlights.filter(h => h.trim()).length ? `
               <ul class="resume-bullets">
-                ${proj.highlights.map(h => `<li>${formatMetrics(escapeHtml(h))}</li>`).join('')}
+                ${proj.highlights.filter(h => h.trim()).map(h => `<li>${formatMetrics(escapeHtml(h))}</li>`).join('')}
               </ul>
             ` : ''}
           </div>
@@ -582,14 +581,15 @@ function renderPreview() {
   }
 
   // Education
-  if (resumeData.education && resumeData.education.length > 0) {
+  const validEdu = (resumeData.education || []).filter(edu => edu && (edu.institution?.trim() || edu.degree?.trim()));
+  if (validEdu.length > 0) {
     resumeHtml += `
       <section class="section-block">
         <h2 class="sec-title">Education</h2>
-        ${resumeData.education.map(edu => `
+        ${validEdu.map(edu => `
           <div class="entry-item" style="margin-bottom: 4px;">
             <div class="entry-row">
-              <div><span class="entry-name">${escapeHtml(edu.institution)}</span> – <span>${escapeHtml(edu.degree)}</span></div>
+              <div><span class="entry-name">${escapeHtml(edu.institution || '')}</span>${edu.institution && edu.degree ? ' – ' : ''}<span>${escapeHtml(edu.degree || '')}</span></div>
               <div class="entry-date">${escapeHtml(edu.period || '')}</div>
             </div>
             ${edu.details ? `<div style="font-size: 9pt; color: #555; margin-top: 1px;">${escapeHtml(edu.details)}</div>` : ''}
@@ -600,12 +600,13 @@ function renderPreview() {
   }
 
   // Certifications
-  if (resumeData.certifications && resumeData.certifications.length > 0) {
+  const validCerts = (resumeData.certifications || []).filter(c => c && c.trim().length > 0);
+  if (validCerts.length > 0) {
     resumeHtml += `
       <section class="section-block">
         <h2 class="sec-title">Certifications</h2>
         <ul class="resume-bullets">
-          ${resumeData.certifications.map(c => `<li>${escapeHtml(c)}</li>`).join('')}
+          ${validCerts.map(c => `<li>${escapeHtml(c)}</li>`).join('')}
         </ul>
       </section>
     `;
