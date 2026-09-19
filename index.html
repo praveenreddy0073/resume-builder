@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATS Resume Studio - Clean, Optimized Resume Builder</title>
+  <meta name="description"
+    content="Design, edit, and export clean, ATS-optimized professional resumes in seconds with real-time scoring, multiple themes, and PDF export.">
+  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2338bdf8'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z'/></svg>">
+</head>
+
+<body>
+
+  <!-- Top App Navigation -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-icon">📄</div>
+      <div class="brand-title">ATS Resume Studio</div>
+      <span class="brand-badge">ATS 100% Ready</span>
+    </div>
+
+    <div class="header-actions">
+      <!-- Quick Role Preset -->
+      <select id="profileSelect" style="width: auto; padding: 6px 12px; font-weight: 500;">
+        <option value="blank">✨ Blank Template (Build Your Own)</option>
+        <option value="praveen_kumar">⚡ Praveen Kumar (Embedded Systems & IoT)</option>
+        <option value="software_engineer">💼 Software Engineer (Sample)</option>
+      </select>
+
+      <a href="templates/classic-ats.html" target="_blank" class="btn btn-outline btn-sm"
+        title="Open standalone ATS template directly in a new tab">
+        🚀 Open Direct Template
+      </a>
+
+      <button id="btnCopyMarkdown" class="btn btn-outline btn-sm" title="Copy formatted Markdown">
+        📋 Copy Markdown
+      </button>
+
+      <button id="btnDownloadJson" class="btn btn-secondary btn-sm" title="Download JSON Schema">
+        💾 Export JSON
+      </button>
+
+      <button id="btnExportHtml" class="btn btn-secondary btn-sm" title="Download standalone HTML">
+        🌐 Export HTML
+      </button>
+
+      <button id="btnPrint" class="btn btn-primary" title="Print or Save to PDF">
+        🖨️ Print / Save to PDF
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container (Editor + Preview) -->
+  <div class="app-container">
+
+    <!-- Left Sidebar: Controls & Editors -->
+    <aside class="sidebar">
+
+      <!-- Tabs -->
+      <nav class="sidebar-tabs">
+        <button class="tab-btn active" data-tab="tab-form">
+          <span>✏️ Form Editor</span>
+        </button>
+        <button class="tab-btn" data-tab="tab-theme">
+          <span>🎨 Style & Layout</span>
+        </button>
+        <button class="tab-btn" data-tab="tab-ats">
+          <span>🔍 ATS Score</span>
+        </button>
+        <button class="tab-btn" data-tab="tab-json">
+          <span>⚡ JSON</span>
+        </button>
+      </nav>
+
+      <!-- Tab Content: Form Editor -->
+      <div id="tab-form" class="tab-content sidebar-content">
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid var(--border-color); margin-bottom: 12px;">
+          <span style="font-size: 12px; color: var(--text-secondary);">Fill your details to build live:</span>
+          <button id="btnClearForm" class="btn btn-outline btn-sm"
+            style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.4); font-size: 11px;">
+            ✨ Start Blank
+          </button>
+        </div>
+        <div id="formEditorContainer">
+          <!-- Dynamically populated by app.js -->
+        </div>
+      </div>
+
+      <!-- Tab Content: Theme & Layout -->
+      <div id="tab-theme" class="tab-content sidebar-content" style="display: none;">
+        <div class="form-card">
+          <div class="form-card-header">
+            <span class="card-title">📐 Layout Template</span>
+          </div>
+          <div class="form-group">
+            <label>Choose Resume Format</label>
+            <select id="themeSelect">
+              <option value="classic">Classic ATS Corporate (Highest ATS Compatibility)</option>
+              <option value="modern">Modern Tech (Sleek Inter Typography)</option>
+              <option value="minimal">Minimalist Executive (Clean Editorial)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-header">
+            <span class="card-title">🔤 Typography & Font Family</span>
+          </div>
+          <div class="form-group">
+            <label>Body & Heading Font</label>
+            <select id="fontSelect">
+              <option value="'Calibri', 'Arial', sans-serif">Calibri (Standard ATS Default)</option>
+              <option value="'Inter', -apple-system, sans-serif">Inter (Modern Clean Sans)</option>
+              <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans (Contemporary)</option>
+              <option value="'Newsreader', Georgia, serif">Newsreader / Georgia (Executive Serif)</option>
+              <option value="'Arial', Helvetica, sans-serif">Arial / Helvetica (Universal)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-header">
+            <span class="card-title">🎨 Accent Colors</span>
+          </div>
+          <div class="form-group">
+            <label>Primary Accent Color (for headers & links)</label>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <input type="color" id="accentPicker" value="#2563eb"
+                style="width: 44px; height: 36px; padding: 2px; cursor: pointer; background: transparent; border: 1px solid var(--border-color); border-radius: 4px;">
+              <span style="font-size: 12px; color: var(--text-secondary);">Select custom accent</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-header">
+            <span class="card-title">💡 Standalone Templates</span>
+          </div>
+          <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">
+            Want raw standalone HTML files that work anywhere without scripts?
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <a href="templates/classic-ats.html" target="_blank" class="btn btn-secondary btn-sm"
+              style="text-decoration: none; text-align: center;">🔗 Open Classic ATS HTML Template</a>
+            <a href="templates/modern-tech.html" target="_blank" class="btn btn-secondary btn-sm"
+              style="text-decoration: none; text-align: center;">🔗 Open Modern Tech HTML Template</a>
+            <a href="templates/minimal.html" target="_blank" class="btn btn-secondary btn-sm"
+              style="text-decoration: none; text-align: center;">🔗 Open Minimalist HTML Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: ATS Scorer -->
+      <div id="tab-ats" class="tab-content sidebar-content" style="display: none;">
+        <div class="score-badge">
+          <div class="score-circle" id="atsScoreNum">95%</div>
+          <div class="score-info">
+            <h4>ATS Optimization Score</h4>
+            <p>Calculated based on scanability, metrics, action verbs, and structure.</p>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-header">
+            <span class="card-title">📋 Optimization Checklist</span>
+          </div>
+          <ul id="atsChecklist" class="checklist">
+            <!-- Dynamically populated -->
+          </ul>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-header">
+            <span class="card-title">💡 ATS Best Practice Rules</span>
+          </div>
+          <ul style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; padding-left: 18px;">
+            <li><strong>Single-Column Hierarchy:</strong> Tables and complex multi-column grids can confuse older ATS
+              scanners.</li>
+            <li><strong>Standard Section Titles:</strong> Always use standard titles like "Work Experience",
+              "Education", "Technical Skills".</li>
+            <li><strong>Quantify Results:</strong> Use numbers, percentages, and revenue metrics to prove concrete
+              impact.</li>
+            <li><strong>Action Verbs First:</strong> Begin each experience bullet point with strong active verbs.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tab Content: JSON Editor -->
+      <div id="tab-json" class="tab-content sidebar-content" style="display: none;">
+        <div class="json-editor-container">
+          <p style="font-size: 12px; color: var(--text-secondary);">
+            Edit raw structured JSON directly. Click <strong>Apply Changes</strong> to update the live preview and form.
+          </p>
+          <textarea id="jsonTextarea" spellcheck="false"></textarea>
+          <button id="applyJsonBtn" class="btn btn-primary" style="align-self: flex-start;">
+            Apply JSON to Resume
+          </button>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Right Live Preview Canvas -->
+    <main class="preview-area">
+
+      <!-- Canvas Toolbar -->
+      <div class="preview-toolbar">
+        <div class="toolbar-group">
+          <span class="toolbar-label">Zoom:</span>
+          <select id="zoomSelect" style="width: 85px; padding: 4px 8px; font-size: 12px;">
+            <option value="0.75">75%</option>
+            <option value="0.85">85%</option>
+            <option value="0.95">95%</option>
+            <option value="1.0" selected>100%</option>
+            <option value="1.10">110%</option>
+            <option value="1.25">125%</option>
+          </select>
+        </div>
+
+        <div class="toolbar-group">
+          <span style="font-size: 12px; color: var(--text-muted);">Standard US Letter / A4 Print Format</span>
+        </div>
+      </div>
+
+      <!-- Viewport & Paper Canvas -->
+      <div class="preview-viewport">
+        <div id="resumePaper" class="resume-paper theme-classic">
+          <!-- Rendered live via app.js -->
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="app.js?v=9"></script>
+</body>
+
+</html>
