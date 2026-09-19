@@ -1,7 +1,7 @@
-# PRAVEEN KUMAR
-**Electronics Engineering Student**  
-Bangalore, Karnataka, India | +91 9632629692 | [praveenreddy007m@gmail.com](mailto:praveenreddy007m@gmail.com)  
-[linkedin.com/in/praveenreddy007m](https://www.linkedin.com/in/praveenreddy007m) | [github.com/praveenreddy0073](https://github.com/praveenreddy0073)
+# FIRSTNAME LASTNAME
+**Embedded Systems & IoT Engineer**  
+City, State, Country | +1 (555) 019-2834 | [contact.engineer@example.com](mailto:contact.engineer@example.com)  
+[linkedin.com/in/username](https://www.linkedin.com/in/username) | [github.com/username](https://github.com/username)
 
 ---
 

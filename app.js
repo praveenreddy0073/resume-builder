@@ -3,7 +3,7 @@
  */
 
 let resumeData = {};
-let currentProfile = 'praveen_kumar';
+let currentProfile = 'blank';
 let currentTheme = 'classic';
 let currentZoom = 1.0;
 let profilesData = {};
@@ -36,17 +36,24 @@ document.addEventListener('DOMContentLoaded', async () => {
  * Load default dataset
  */
 async function loadSampleData() {
+  // Always initialize with generic embedded profiles as baseline
+  profilesData = {
+    blank: getBlankProfile(),
+    software_engineer: getSampleSoftwareProfile(),
+    embedded_engineer: getDefaultProfile()
+  };
+
   const urlParams = new URLSearchParams(window.location.search);
   const profileParam = urlParams.get('profile');
   const profileSelect = document.getElementById('profileSelect');
 
   if (profileParam) {
-    if (profileParam === 'praveen' || profileParam === 'praveen_kumar') {
-      currentProfile = 'praveen_kumar';
-    } else if (profileParam === 'blank' || profileParam === 'empty') {
+    if (profileParam === 'blank' || profileParam === 'empty') {
       currentProfile = 'blank';
-    } else if (profileParam === 'software_engineer' || profileParam === 'sample') {
+    } else if (profileParam === 'software_engineer' || profileParam === 'software') {
       currentProfile = 'software_engineer';
+    } else if (profileParam === 'embedded_engineer' || profileParam === 'embedded') {
+      currentProfile = 'embedded_engineer';
     }
     if (profileSelect) profileSelect.value = currentProfile;
   } else if (profileSelect && profileSelect.value) {
@@ -57,26 +64,22 @@ async function loadSampleData() {
     const response = await fetch('./data/sample_data.json?t=' + new Date().getTime(), { cache: 'no-store' });
     if (response.ok) {
       const data = await response.json();
-      profilesData = data.profiles;
-      if (profilesData[currentProfile]) {
-        resumeData = JSON.parse(JSON.stringify(profilesData[currentProfile]));
-      } else if (currentProfile === 'blank') {
-        resumeData = getBlankProfile();
-      } else if (profilesData['praveen_kumar']) {
-        resumeData = JSON.parse(JSON.stringify(profilesData['praveen_kumar']));
-      } else {
-        resumeData = getDefaultProfile();
+      if (data && data.profiles) {
+        profilesData = { ...profilesData, ...data.profiles };
       }
-    } else {
-      throw new Error('Fallback to inline sample');
     }
   } catch (err) {
-    console.warn('Using embedded default profile', err);
-    if (currentProfile === 'blank') {
-      resumeData = getBlankProfile();
-    } else {
-      resumeData = getDefaultProfile();
-    }
+    console.warn('Using embedded profiles', err);
+  }
+
+  if (profilesData[currentProfile]) {
+    resumeData = JSON.parse(JSON.stringify(profilesData[currentProfile]));
+  } else if (currentProfile === 'software_engineer') {
+    resumeData = getSampleSoftwareProfile();
+  } else if (currentProfile === 'embedded_engineer') {
+    resumeData = getDefaultProfile();
+  } else {
+    resumeData = getBlankProfile();
   }
 }
 
@@ -108,11 +111,21 @@ function setupEventListeners() {
   if (profileSelect) {
     profileSelect.addEventListener('change', (e) => {
       currentProfile = e.target.value;
-      if (profilesData[currentProfile]) {
+      if (profilesData && profilesData[currentProfile]) {
         resumeData = JSON.parse(JSON.stringify(profilesData[currentProfile]));
-      } else if (currentProfile === 'blank') {
+      } else if (currentProfile === 'software_engineer') {
+        resumeData = getSampleSoftwareProfile();
+      } else if (currentProfile === 'embedded_engineer') {
+        resumeData = getDefaultProfile();
+      } else {
         resumeData = getBlankProfile();
       }
+      renderForm();
+      renderPreview();
+      updateATSScore();
+      showToast(`Loaded ${e.target.options[e.target.selectedIndex].text}`);
+    });
+  }
       renderForm();
       renderPreview();
       updateATSScore();
@@ -916,7 +929,7 @@ function exportHtmlFile() {
 
 function copyMarkdownToClipboard() {
   const p = resumeData.personal || {};
-  let md = `# ${p.name || 'PRAVEEN KUMAR'}\n`;
+  let md = `# ${p.name || 'FIRSTNAME LASTNAME'}\n`;
   md += `**${p.title || 'Embedded Systems & IoT Engineer'}**\n`;
   const contacts = [];
   if (p.location) contacts.push(p.location);
@@ -1028,36 +1041,36 @@ function cleanUrl(url) {
 }
 
 function getLinkedInUrl(val) {
-  if (!val) return 'https://www.linkedin.com/in/praveenreddy007m';
+  if (!val) return 'https://www.linkedin.com/in/username';
   const clean = val.trim();
   if (clean.startsWith('http://') || clean.startsWith('https://')) return clean;
   if (clean.includes('linkedin.com/in/')) return 'https://' + clean.replace(/^https?:\/\//, '');
-  if (clean.toLowerCase() === 'linkedin') return 'https://www.linkedin.com/in/praveenreddy007m';
+  if (clean.toLowerCase() === 'linkedin') return 'https://www.linkedin.com/in/username';
   return 'https://www.linkedin.com/in/' + clean.replace(/^@/, '');
 }
 
 function getGithubUrl(val) {
-  if (!val) return 'https://github.com/praveenreddy0073';
+  if (!val) return 'https://github.com/username';
   const clean = val.trim();
   if (clean.startsWith('http://') || clean.startsWith('https://')) return clean;
   if (clean.includes('github.com/')) return 'https://' + clean.replace(/^https?:\/\//, '');
-  if (clean.toLowerCase() === 'github') return 'https://github.com/praveenreddy0073';
+  if (clean.toLowerCase() === 'github') return 'https://github.com/username';
   return 'https://github.com/' + clean.replace(/^@/, '');
 }
 
 function getDefaultProfile() {
   return {
     personal: {
-      name: "PRAVEEN KUMAR",
-      title: "Electronics Engineering Student",
-      location: "Bangalore, Karnataka, India",
-      phone: "+91 9632629692",
-      email: "praveenreddy007m@gmail.com",
-      linkedin: "linkedin.com/in/praveenreddy007m",
-      github: "github.com/praveenreddy0073",
+      name: "FIRSTNAME LASTNAME",
+      title: "Embedded Systems & IoT Engineer",
+      location: "City, State / Region",
+      phone: "+1 (555) 019-2834",
+      email: "contact.engineer@example.com",
+      linkedin: "linkedin.com/in/username",
+      github: "github.com/username",
       portfolio: ""
     },
-    summary: "Electronics and Communication Engineering undergraduate with practical experience in Embedded Systems, Firmware Development, and Digital VLSI. Skilled in developing microcontroller-based systems (ESP32, STM32, Arduino, 8051), wireless communication protocols (LoRa, BLE, Wi-Fi), sensor interfacing (I2C, SPI, UART), and PCB design using KiCad. Experienced in building reliable hardware-software projects.",
+    summary: "Electronics and Communication Engineering graduate with practical experience in Embedded Systems, Firmware Development, and Digital VLSI. Skilled in developing microcontroller-based systems (ESP32, STM32, Arduino, 8051), wireless communication protocols (LoRa, BLE, Wi-Fi), sensor interfacing (I2C, SPI, UART), and PCB design using KiCad. Experienced in building reliable hardware-software projects.",
     skills: [
       { category: "Programming Languages", items: "C, Embedded C, Python, Verilog HDL, Assembly (8051)" },
       { category: "Microcontrollers & Hardware", items: "ESP32, STM32, Arduino Uno, 8051" },
@@ -1157,5 +1170,61 @@ function getBlankProfile() {
       }
     ],
     certifications: []
+  };
+}
+
+function getSampleSoftwareProfile() {
+  return {
+    personal: {
+      name: "ALEX CHEN",
+      title: "Full Stack Software Engineer",
+      location: "San Francisco, CA",
+      phone: "+1 (555) 349-2049",
+      email: "alex.chen.dev@email.com",
+      linkedin: "linkedin.com/in/alexchen-dev",
+      github: "github.com/alexchen",
+      portfolio: "alexchen.dev"
+    },
+    summary: "Full Stack Software Engineer with 3+ years of experience architecting distributed cloud applications and high-throughput microservices in TypeScript, React, and Node.js. Proven track record reducing API latency by 45% and optimizing PostgreSQL queries for 2M+ active daily users.",
+    skills: [
+      { category: "Programming Languages", items: "JavaScript (ES6+), TypeScript, Python, SQL, HTML5, CSS3" },
+      { category: "Frameworks & Libraries", items: "React.js, Next.js, Node.js, Express.js, TailwindCSS, Redux Toolkit" },
+      { category: "Database & Cloud", items: "PostgreSQL, MongoDB, Redis, AWS (S3, Lambda, EC2), Docker" }
+    ],
+    experience: [
+      {
+        role: "Software Engineer",
+        company: "CloudScale Technologies",
+        location: "San Francisco, CA",
+        period: "2023 – Present",
+        highlights: [
+          "Architected REST and GraphQL microservices in Node.js handling 15k requests/sec with 99.98% uptime.",
+          "Spearheaded database indexing and query optimization on PostgreSQL, reducing average P99 query latency by 42%."
+        ]
+      }
+    ],
+    projects: [
+      {
+        name: "Real-Time Collaborative Code Editor",
+        technologies: "Next.js, TypeScript, WebSockets, Redis, Docker",
+        link: "github.com/alexchen/collab-editor",
+        highlights: [
+          "Built a low-latency collaborative document editor supporting real-time concurrent multi-user editing with OT algorithms."
+        ]
+      }
+    ],
+    education: [
+      {
+        degree: "Bachelor of Science in Computer Science",
+        institution: "University of California, Berkeley",
+        location: "Berkeley, CA",
+        period: "2019 – 2023",
+        details: "GPA: 3.85 / 4.0 • Dean's Honors List"
+      }
+    ],
+    certifications: [
+      "AWS Certified Solutions Architect – Associate",
+      "Meta Frontend Developer Professional Certificate"
+    ]
   };
 }
